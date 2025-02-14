@@ -1,32 +1,32 @@
 name: Build APK
 
-   on:
-     push:
-       branches:
-         - main  # Trigger on push to the main branch
-     workflow_dispatch:  # Allow manual triggering
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+  workflow_dispatch:  # Allow manual triggering
 
-   jobs:
-     build:
-       runs-on: ubuntu-latest
-       steps:
-         - name: Checkout code
-           uses: actions/checkout@v4
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-         - name: Set up JDK
-           uses: actions/setup-java@v4
-           with:
-             distribution: 'zulu'
-             java-version: '17'
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
 
-         - name: Make Gradle executable
-           run: chmod +x ./gradlew
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
 
-         - name: Build APK (Debug)
-           run: ./gradlew assembleDebug
+      - name: Build APK (Debug)
+        run: ./gradlew assembleDebug
 
-         - name: Upload APK as Artifact
-           uses: actions/upload-artifact@v4
-           with:
-             name: app-debug.apk
-             path: app/build/outputs/apk/debug/app-debug.apk
+      - name: Upload APK as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
