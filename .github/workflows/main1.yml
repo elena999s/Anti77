@@ -1,0 +1,33 @@
+name: Fix Gradle Wrapper
+
+     on:
+       workflow_dispatch:  # Allow manual triggering
+
+     jobs:
+       fix-gradle:
+         runs-on: ubuntu-latest
+         steps:
+           - name: Checkout code
+             uses: actions/checkout@v4
+
+           - name: Set up JDK
+             uses: actions/setup-java@v4
+             with:
+               distribution: 'zulu'
+               java-version: '17'
+
+           - name: Delete corrupted Gradle wrapper
+             run: |
+               rm -rf gradle gradlew gradlew.bat
+
+           - name: Regenerate Gradle wrapper
+             run: |
+               ./gradlew wrapper
+
+           - name: Commit and push changes
+             run: |
+               git config --global user.name "GitHub Actions"
+               git config --global user.email "actions@github.com"
+               git add gradle/wrapper/gradle-wrapper.jar gradlew gradlew.bat
+               git commit -m "Fix corrupted Gradle wrapper"
+               git push origin main
